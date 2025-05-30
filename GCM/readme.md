@@ -158,7 +158,7 @@ Simulate a birthday paradox attack that shows tag collisions in AES-GCM, but not
 Simulation that approximates the Birthday Paradox over 128-bit tags, focusing on how collisions become likely after ~2⁶⁴ tags. 
 Weaken tag: Downscale this to 32 or 64-bit tags so we can observe collisions faster in code.
 
-With a 32-bit tag, the birthday bound hits around $2^{16}$messages.
+With a 32-bit tag, the birthday bound hits around $2^{16}$ messages.
 With 128-bit tags (real GCM), the bound is ∼ $2^{64}$ — far too large to simulate without a supercomputer.
 
 🧠 Key Takeaways
