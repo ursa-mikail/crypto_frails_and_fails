@@ -1,11 +1,11 @@
 # 🔐 Why is the key exhaustion at ~64 GB limit for AES-GCM?
 
 Here is the breakdown: 
-2**32 = 4_294_967_296 bytes
+2³²  = 4_294_967_296 bytes
 
-4 GB (since 1 GB = 2**30 = 1_073_741_824) 
+4 GB (since 1 GB = 2³⁰ = 1_073_741_824) 
 
-64 GB = 64 × 2**30 = 2**6 × 2**30 = 2**36 bytes
+64 GB = 64 × 2³⁰ = 2⁶ × 2³⁰ = 2³⁶ bytes
 
 For 64 GB, this comes down to how AES-GCM handles its internal counters and maximum message size, especially during encryption under a single key and nonce.
 
@@ -14,9 +14,9 @@ AES-GCM uses a 32-bit block counter when constructing its IV (Initialization Vec
 - AES operates on 128-bit (16-byte) blocks.
 - The GCM mode uses a 32-bit (4-byte) counter as part of the 96-bit nonce+counter (in the IV).
 - Therefore, the counter can count up to:
-	2**32 blocks (4,294,967,296 blocks) 
-		= 2**32 x 16 bytes (68,719,476,736 bytes) 
-		= 2**36 bytes ((4,294,967,296)/(1,073,741,824)) = 64 GB
+	2³² blocks (4,294,967,296 blocks) 
+		= 2³² x 16 bytes (68,719,476,736 bytes) 
+		= 2³⁶ bytes ((4,294,967,296)/(1,073,741,824)) = 64 GB
 * _each block is 16 bytes_
 
 | Term               | Size in bytes                        |
@@ -91,7 +91,7 @@ The Birthday Paradox applies to the authentication tag generation in GCM, not th
 - The tag is supposed to be unique per key/nonce combination, protecting against forgeries.
 
 🤯 The problem: Due to the birthday paradox, if an attacker sees around:
-2**𝑛/2 = 2**64
+2**𝑛/2 = 2⁶⁴
 
 Authentication tags (where 𝑛 = 128 is the tag size), then the probability of a collision becomes non-negligible — which could allow forgeries or plaintext recovery depending on the scenario.
 
