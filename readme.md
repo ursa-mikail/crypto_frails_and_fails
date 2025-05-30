@@ -63,7 +63,10 @@ Demonstrate hash collision with chosen inputs.
 ## 🛑 9. Lack of Authenticated Encryption
 
 Use AES-CBC without HMAC.
+
 Tamper with ciphertext and show no detection.
+
+![CBC](CBC)
 
 ## 🔄 10. Rolling Your Own Crypto
 
