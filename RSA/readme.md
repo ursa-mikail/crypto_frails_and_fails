@@ -16,7 +16,7 @@ iroot from gmpy2 efficiently computes the integer cube root of m^3.
 
 Since m^3 is less than the product of the moduli, it recovers the exact m.
 
-# When `m^3 < n1 * n2 * n3 is not met`
+## When `m^3 < n1 * n2 * n3 is not met`
 Håstad's attack fails when the condition m^3 < n1 * n2 * n3 is not met — that is, when the plaintext is too large.
 
 In this case:
