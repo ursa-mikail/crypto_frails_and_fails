@@ -103,14 +103,14 @@ Authentication tags (where 𝑛 = 128 is the tag size), then the probability of 
 | **Max total messages per key**        | \~ $2^{64}$ messages     | Birthday bound on 128-bit tag (GHASH collisions) |
 
 
-## 🔄 What Happens if You Go Past 2**64  Tags?
+## 🔄 What Happens if You Go Past $2^{64}$  Tags?
 If you encrypt or verify more than 2⁶⁴ messages under the same key (regardless of nonce), the chance of two tags colliding becomes significant, breaking the integrity guarantees of GCM. An attacker might:
 - Forge a valid tag for a modified message
 - Reuse a tag in a replay attack
 - Learn about relationships between plaintexts
 
 ✅ Note 
-- Rotate keys long before you hit 2**64 messages.
+- Rotate keys long before you hit $2^{64}$ messages.
 - Always use unique nonces per key to avoid catastrophic failures.
 - Consider alternatives like AES-SIV or XChaCha20-Poly1305 for better misuse resistance if random or repeated nonces are possible.
 
@@ -130,7 +130,7 @@ Note: Despite the larger key size, the block size, tag size, and GHASH field sta
 
 # 🎂 Birthday Bound Still Applies to the Tag (128-bit)
 AES-256-GCM still uses a 128-bit authentication tag, which means:
-- The birthday bound is unchanged: 2**(128/2) = 2**64
+- The birthday bound is unchanged: $2^{(128/2))}$ = $2^{64}$
 - The risk of tag collisions and forgery due to the Birthday Paradox still kicks in after ~2⁶⁴ encryptions under the same key.
 
 > 💡 Even with a 256-bit key, the integrity security is still only ~128 bits because the tag is 128 bits.
