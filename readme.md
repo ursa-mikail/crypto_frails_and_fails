@@ -34,7 +34,10 @@ Demonstrate recovery of plaintext or impersonation.
 ## 📅 5. Predictable RNG
 
 Use rand() or other weak PRNGs to generate keys/IVs.
+
 Show brute-force recovery of keys from low entropy.
+
+![RNG](RNG)
 
 ## 🧱 6. RSA with Small Exponent (e = 3)
 
