@@ -100,7 +100,7 @@ Authentication tags (where 𝑛 = 128 is the tag size), then the probability of 
 | Limit                                 | Bound                   | Reason                                           |
 | ------------------------------------- | ----------------------- | ------------------------------------------------ |
 | **Max message size per (key, nonce)** | $2^{36}$ bytes (64 GiB) | 32-bit counter exhaustion                        |
-| **Max total messages per key**        | \~$2^{64}$ messages     | Birthday bound on 128-bit tag (GHASH collisions) |
+| **Max total messages per key**        | \~ $2^{64}$ messages     | Birthday bound on 128-bit tag (GHASH collisions) |
 
 
 ## 🔄 What Happens if You Go Past 2**64  Tags?
