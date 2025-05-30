@@ -91,7 +91,7 @@ The Birthday Paradox applies to the authentication tag generation in GCM, not th
 - The tag is supposed to be unique per key/nonce combination, protecting against forgeries.
 
 🤯 The problem: Due to the birthday paradox, if an attacker sees around:
-2**𝑛/2 = 2⁶⁴
+$2^{n/2}$ = 2⁶⁴
 
 Authentication tags (where 𝑛 = 128 is the tag size), then the probability of a collision becomes non-negligible — which could allow forgeries or plaintext recovery depending on the scenario.
 
