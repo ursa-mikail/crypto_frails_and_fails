@@ -5,6 +5,7 @@ Each of these showcases a “don’t do this in production” anti-pattern:
 ## 🔐 1. Truncated GCM Tag Demo
 
 Show AES-GCM with 32/64-bit auth tags instead of 128-bit.
+
 Attack simulation: brute-force tag recovery on small plaintexts.
 ![GCM](GCM)
 
