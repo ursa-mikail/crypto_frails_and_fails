@@ -130,7 +130,7 @@ Note: Despite the larger key size, the block size, tag size, and GHASH field sta
 
 # 🎂 Birthday Bound Still Applies to the Tag (128-bit)
 AES-256-GCM still uses a 128-bit authentication tag, which means:
-- The birthday bound is unchanged: $2^{(128/2))}$ = $2^{64}$
+- The birthday bound is unchanged: $2^{(128/2)}$ = $2^{64}$
 - The risk of tag collisions and forgery due to the Birthday Paradox still kicks in after ~2⁶⁴ encryptions under the same key.
 
 > 💡 Even with a 256-bit key, the integrity security is still only ~128 bits because the tag is 128 bits.
@@ -158,12 +158,12 @@ Simulate a birthday paradox attack that shows tag collisions in AES-GCM, but not
 Simulation that approximates the Birthday Paradox over 128-bit tags, focusing on how collisions become likely after ~2⁶⁴ tags. 
 Weaken tag: Downscale this to 32 or 64-bit tags so we can observe collisions faster in code.
 
-With a 32-bit tag, the birthday bound hits around 2**16 messages.
-With 128-bit tags (real GCM), the bound is ∼2**64 — far too large to simulate without a supercomputer.
+With a 32-bit tag, the birthday bound hits around $2^{16}$messages.
+With 128-bit tags (real GCM), the bound is ∼ $2^{64}$ — far too large to simulate without a supercomputer.
 
 🧠 Key Takeaways
-1. The Birthday Paradox means: the probability of two outputs colliding rises sharply after √(2**𝑛)  = 2**𝑛/2  samples.
-2. For 128-bit tags, that’s 2**64  encryptions.
+1. The Birthday Paradox means: the probability of two outputs colliding rises sharply after √ $2^{n}$  = $2^{(n/2)}$  samples.
+2. For 128-bit tags, that’s $2^{64}$  encryptions.
 3. If you're reusing nonces, or hitting those limits, you're violating AES-GCM's security assumptions — and attacks like tag forgery become viable.
 
 
