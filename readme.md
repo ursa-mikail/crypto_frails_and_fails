@@ -34,7 +34,9 @@ Show brute-force recovery of keys from low entropy.
 ## 🧱 6. RSA with Small Exponent (e = 3)
 
 Encrypt the same plaintext across 3 public keys (Håstad’s Broadcast Attack).
+
 Recover plaintext without private keys.
+![RSA](RSA)
 
 ## 🧮 7. Padding Oracle Attack Demo
 
