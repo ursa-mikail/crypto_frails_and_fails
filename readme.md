@@ -73,3 +73,8 @@ Tamper with ciphertext and show no detection.
 Show a "custom encryption" function.
 Break it using statistical analysis.
 
+## 🔄 11. Cache And Timing
+
+Leaky processes. 
+
+Timing attacks: ![cache_and_timing](cache_and_timing)
