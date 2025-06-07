@@ -34,6 +34,8 @@ This 64 GB limit is per key/nonce pair. You can encrypt more data if you:
 - Use a different nonce with the same key, or
 - Rotate keys if you're encrypting large data streams
 
+![weaken_tag](weaken_tag.png)
+
 ## Where the 96 bits come into play in AES-GCM?
 ### Why it's not part of the 2³² × 16 = 2³⁶ bytes = 64 GB limit calculation?
 
