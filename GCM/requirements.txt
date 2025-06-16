@@ -1,0 +1,33 @@
+cryptography
+
+# ensure 1st: 
+# function start_python_venv() {
+#     python3 -m venv venv
+#     source venv/bin/activate
+# 
+#     echo "start_python_venv [started]"
+    # python3 -m pip install <package.name>
+    # python3 -m pip install --upgrade pip
+# }  
+# 
+
+# function stop_python_venv() {
+#     deactivate 
+#     
+    # Find the PIDs and ensure they are space-separated
+#    pids=$(pgrep -f "venv/bin/python")
+# 
+#     if [ -z "$pids" ]; then
+#         echo "No running [venv/bin/python] found."
+#     else
+        # Kill all matching PIDs safely
+#         echo "Stopping [venv/bin/python] with PIDs: $pids"
+#         echo "$pids" | xargs kill -9
+#         echo "[venv/bin/python] stopped."
+#     fi
+# 
+#     ps aux | grep "venv/bin/python"
+# }
+
+# pip install -r requirements.txt
+
