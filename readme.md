@@ -1,6 +1,38 @@
 # 💣 Weakening On Crypto Frails and Fails 
+🔐 Cryptographic Attack Demos & Vulnerability Simulations
+
+This repository is a curated collection of Python-based demonstrations simulating vulnerabilities and attacks across different cryptographic primitives, modes, and implementation scenarios.
+
+Each folder includes scripts and visualizations to help you understand where and how cryptographic schemes can fail—when used incorrectly, implemented poorly, or under specific threat models.
 
 Each of these showcases a “don’t do this in production” anti-pattern:
+
+| Folder                  | Description                                                                                                          |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| **CBC/**                | Attacks exploiting the malleability of Cipher Block Chaining (CBC) mode (e.g., POODLE, tampering without integrity). |
+| **ECB/**                | Visualization and demonstration of Electronic Codebook (ECB) mode weaknesses—especially pattern leakage.             |
+| **GCM/**                | Simulated attacks on AES-GCM, including tag forgery through collisions and weakened tags.                            |
+| **GCM\_CTR/**           | Dangers of nonce reuse in GCM and CTR, showing how it leads to 2-time pad vulnerabilities.                           |
+| **RNG/**                | Attacks on random number generators, showing how poor RNGs lead to key recovery and predictability.                  |
+| **RSA/**                | Cryptanalytic attacks on RSA, including Hastad’s broadcast attack.                                                   |
+| **broken\_RNG/**        | Bruteforce examples targeting weak or linear PRNGs.                                                                  |
+| **cache\_and\_timing/** | Cache-based and timing attacks visualized and explained, showcasing side-channel vulnerabilities.                    |
+
+<hr>
+
+## 📚 Recommended Use
+
+📖 Learn: Understand how classical and modern crypto can fail.
+🧪 Experiment: Tweak code and run your own variations.
+🛡 Defend: Study these to avoid implementing insecure crypto in your own systems.
+
+## ⚠️ Disclaimer
+This repository is for educational and ethical use only. The goal is to foster understanding of cryptographic design, not to aid malicious activity.
+
+## 🧠 Credits
+Built by practitioners interested in strengthening system security through transparency, experimentation, and shared knowledge.
+
+<hr>
 
 ## 🔐 1. Truncated GCM Tag Demo
 
