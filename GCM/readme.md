@@ -62,6 +62,14 @@ J_{2^32 - 1} = IV || 0xFFFFFFFF
 ```
 So the 96-bit IV acts as a prefix, and the 32-bit counter is the suffix.
 
+The 96-bit IV in AES-GCM can represent a session, message, or record ID, depending on how you're structuring your data. Its role is to guarantee uniqueness and ensure security of the encryption and authentication process.
+
+⚠️ Security Reminder
+IV reuse in AES-GCM with the same key is catastrophic. So:
+- Think of the IV as your anti-replay and anti-reuse token.
+- If your “session” means a unique message or record, it’s a good abstraction.
+- The counter mechanism ensures non-repeating ciphertext blocks, preventing patterns that could otherwise mimic ECB-mode weaknesses.
+
 🧠 The 64 GB Limit
 Where the 2³² comes from:
 - You're allowed to increment that 32-bit counter up to 2³² - 1.
