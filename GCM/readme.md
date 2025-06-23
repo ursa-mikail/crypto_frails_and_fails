@@ -34,6 +34,8 @@ This 64 GB limit is per key/nonce pair. You can encrypt more data if you:
 - Use a different nonce with the same key, or
 - Rotate keys if you're encrypting large data streams
 
+AES-GCM = AES in Counter (CTR) mode + Galois Hash (GHASH) for authentication.
+
 ![weaken_tag](weaken_tag.png)
 
 ## Where the 96 bits come into play in AES-GCM?
@@ -60,15 +62,47 @@ J₂ = IV || 0x00000003
 
 J_{2^32 - 1} = IV || 0xFFFFFFFF
 ```
+
+- First 96 bits: Fixed, unique nonce.
+- Last 32 bits: Actual counter value (starts at 1, increases for each block).
+
 So the 96-bit IV acts as a prefix, and the 32-bit counter is the suffix.
 
-The 96-bit IV in AES-GCM can represent a session, message, or record ID, depending on how you're structuring your data. Its role is to guarantee uniqueness and ensure security of the encryption and authentication process.
+🔑 What the 96-bit IV Represents
+
+| Term                                              | Meaning in Context                                                                                                         |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **IV (Nonce)**                                    | A **unique value** used to ensure that each encryption operation, even with the same key, produces a different ciphertext. |
+| **Session ID**                                    | Often implemented as the IV, especially in protocols where one IV is used per session or per message.                      |
+| **Per-message/per-record/per-session identifier** | Ensures **uniqueness** in GCM encryption.                                                                                  |
+
+
+The 96-bit IV in AES-GCM can represent a session, message, or record ID, depending on how you're structuring the data. Its role is to guarantee uniqueness and ensure security of the encryption and authentication process.
+
+🧩 IV as a Session or Message Identifier
+In protocols like TLS, IPsec, or QUIC, the IV is often derived from:
+	- A fixed key + per-record counter
+	- Or a random/session-specific value
+
+In practice:
+	- The 96-bit IV often encodes a session ID, record number, or message counter.
+	- It uniquely defines the context for that encryption call.
+
 
 ⚠️ Security Reminder
 IV reuse in AES-GCM with the same key is catastrophic. So:
 - Think of the IV as your anti-replay and anti-reuse token.
 - If your “session” means a unique message or record, it’s a good abstraction.
 - The counter mechanism ensures non-repeating ciphertext blocks, preventing patterns that could otherwise mimic ECB-mode weaknesses.
+
+| Use Case          | IV Content                 |
+| ----------------- | -------------------------- |
+| TLS               | Sequence number + salt     |
+| IPsec             | SPI + sequence             |
+| Application-level | Random nonce or message ID |
+| File encryption   | Per-file or per-block ID   |
+
+
 
 🧠 The 64 GB Limit
 Where the 2³² comes from:
@@ -195,5 +229,107 @@ With 128-bit tags (real GCM), the bound is ∼ $2^{64}$ — far too large to sim
 > 1. Tags are truncated (i.e., less than 128 bits)
 > 2. Nonce reuse occurs
 > 3. Enough encryptions are done to hit a birthday collision
+
+<hr>
+
+| Spec                     | AES-GCM         | ChaCha20-Poly1305 | XChaCha20-Poly1305 |
+| ------------------------ | --------------- | ----------------- | ------------------ |
+| **Block Size**           | 128 bits (16 B) | 512 bits (64 B)   | 512 bits (64 B)    |
+| **Counter Size**         | 32 bits         | 32 bits           | 32 bits            |
+| **IV (Nonce) Size**      | 96 bits (12 B)  | 96 bits (12 B)    | 192 bits (24 B)    |
+| **Max Bytes per Key/IV** | 2³⁶ = \~64 GiB  | 2³⁶ = \~64 GiB    | 2³⁶ = \~64 GiB     |
+
+## ChaCha20-Poly1305 
+
+### 🔸 Counter Space
+- ChaCha20 uses a 32-bit block counter, starting from 1.
+- Max value: 2³² - 1 blocks.
+- Since each block is 64 bytes:
+
+```
+2³² blocks × 64 bytes/block = 2³⁸ bytes = 256 GiB
+```
+But: RFC 8439 (IETF spec for ChaCha20-Poly1305) limits each encryption to 2³⁶ bytes = 64 GiB, to:
+- Ensure compatibility
+- Prevent GHASH-like vulnerabilities in AEAD mode
+- Limit Poly1305 tag forgery attempts
+
+✅ So the 64 GiB limit is conservative, not imposed by counter exhaustion, but by authenticated encryption safety margins.
+
+## XChaCha20-Poly1305
+### 🔸 Difference from ChaCha20
+- Uses a 192-bit (24-byte) IV, not 96-bit.
+- Applies HChaCha20 to derive a subkey and nonce from the 24-byte nonce.
+- Then proceeds with regular ChaCha20-Poly1305 using derived subkey and 12-byte nonce.
+
+### 🔸 Effect on Limits
+- The internal counter and block structure remain the same.
+- Hence, XChaCha20-Poly1305 also respects the 2³⁶ byte (~64 GiB) per encryption limit, even though its nonce space is much larger (2¹⁹² vs 2⁹⁶).
+
+
+## 🔍 Note
+AES-GCM:Limit of 2³² blocks × 16 bytes = 2³⁶ bytes = 64 GiB before counter wraps.
+
+ChaCha20: 
+- Uses 64-byte blocks, so fewer blocks are needed to cover same plaintext size.
+- Still uses a 32-bit counter → same theoretical limit.
+- So the 64 GiB limit in both AES-GCM and ChaCha20 is due to the 32-bit counter
+- Although ChaCha20 could theoretically encrypt more, the authenticated encryption mode (Poly1305) caps it to 64 GiB per encryption to ensure safety.
+
+- ChaCha20-Poly1305 and XChaCha20-Poly1305 both use a 32-bit block counter and 64-byte blocks.
+- The 64 GiB limit is due to safety constraints in AEAD mode, not because of counter overflow.
+- XChaCha20 just offers a bigger nonce space (192 bits) to avoid nonce reuse across sessions/messages — good for randomized IVs.
+
+Therein, all 3 (AES-GCM, ChaCha20-Poly1305, and XChaCha20-Poly1305) are intentionally limited to ~64 GiB per key/IV pair due to compliance cryptographic safety limits, **not because of their block size or counter range**. 
+
+
+| Detail                 | AES-GCM         | ChaCha20-Poly1305                  |
+| ---------------------- | --------------- | ---------------------------------- |
+| Block Size             | 16 bytes        | 64 bytes                           |
+| Max Blocks (2³²)       | 64 GiB total    | 256 GiB theoretically              |
+| Standard-imposed Limit | 64 GiB          | 64 GiB                             |
+| IV Size                | 96 bits (fixed) | 96 bits (ChaCha20) / 192 (XChaCha) |
+
+
+| Property                        | AES-GCM             | ChaCha20-Poly1305    | XChaCha20-Poly1305 |
+| ------------------------------- | ------------------- | -------------------- | ------------------ |
+| Block Size                      | 128-bit (16 B)      | 512-bit (64 B)       | 512-bit (64 B)     |
+| Counter Size                    | 32-bit              | 32-bit               | 32-bit             |
+| Max Counter Space (Theoretical) | 2³² × 16 B = 64 GiB | 2³² × 64 B = 256 GiB | 256 GiB            |
+| **Practical AEAD Safety Limit** | 64 GiB              | 64 GiB               | 64 GiB             |
+| Max Nonce Space                 | 2⁹⁶                 | 2⁹⁶                  | **2¹⁹²** ← ✅       |
+
+
+## ❌ Why You Still Can’t Cross 64 GiB
+Even though:
+- ChaCha20 could theoretically handle 256 GiB (2³² × 64 B) …
+- Poly1305 (the authenticator) and AEAD limits in RFC 8439 still cap the authenticated encryption size at 2³⁶ bytes = 64 GiB.
+
+```
+Max counter range:       2³² blocks
+ChaCha20 block size:     64 bytes
+Total stream size:       2³⁸ bytes = 256 GiB (in theory)
+
+BUT → RFC 8439 AEAD limit: 2³⁶ bytes = 64 GiB
+Why? →→  Poly1305 tag safety.
+```
+🚫 No advantage for large >64 GiB messages
+All 3 modes (AES-GCM, ChaCha20-Poly1305, XChaCha20) must chunk large files into ≤64 GiB segments per key/nonce pair.
+
+This protects against:
+- Forgery attacks
+- Tag collision
+- Key leakage from MAC extension forgery attempts
+
+## Advantage of XChaCha
+It’s not about per-message size. The real advantage of XChaCha20-Poly1305 over AES-GCM lies in the enormous nonce space, resistance to IV reuse, and better performance on non-AES hardware.
+
+
+| Feature                        | Explanation                                                                                                                              |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| 🔒 **Nonce Reuse Protection**  | XChaCha gives a **192-bit nonce**, which reduces the risk of accidental IV reuse drastically. AES-GCM’s 96-bit IV is easier to screw up. |
+| 🚫 **No timing attacks**       | ChaCha20 is based on simple arithmetic and logic — **constant-time**, unlike AES which may leak through cache timing.                    |
+| 🧠 **Simpler IV Handling**     | With XChaCha, you can use **fully random 192-bit IVs safely** — perfect for systems without persistent counters or sequence numbers.     |
+| ⚡ **Fast on non-AES hardware** | ChaCha20 is faster than AES on systems **without AES-NI**, like many mobile, embedded, or WebAssembly environments.                      |
 
 
