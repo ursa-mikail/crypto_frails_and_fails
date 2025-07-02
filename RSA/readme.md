@@ -358,6 +358,9 @@ RSA is only secure if keys are generated correctly. If devices use the same prim
 
 gcd($$\ n_1, n_2 \$$) = 1
 
+Euclid considered the problem of finding the gcd of 2 integers in Elements, book VII, proposition 2, and gave a practical way to do it.
+
+![gcd](gcd.png)
 
 📚 References
 Lenstra et al. (2012) — Ron was wrong, Whit is right (https://factorable.net/)
