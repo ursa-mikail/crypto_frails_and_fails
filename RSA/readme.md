@@ -341,12 +341,22 @@ Here, CRT is the core of the attack.
 | Attack relies on CRT?  | ❌ No                        | ✅ Yes (in Håstad's)               |
 
 
+## How unlikely is it that a prime number would be used in 2 different keys?
+The 2 primes that go into a 1024-bit RSA key are generally both 512 bits long. (If multiply a j-digit number by a k-digit number, you can expect the answer to be around j+k digits long. Likewise with a j-bit and a k-bit number. This is based on the idea that $$\ b^j × b^k = b^{(j+k)} \$$.)
 
+How many different 512-bit primes are there? A theorem called the Prime Number Theorem can be used to make a good estimate. It indicates that the fraction of numbers around the size of $$\ 2^{512} \$$ that are prime is around 1/($$\ 512 \ln 2 \$$)=0.0028... or around 0.28%. We can also test this experimentally with a random sample, which shows around the same result. Note that this includes all 512-bit even numbers, which are never prime, so about 0.6% of odd 512-bit numbers are prime.
 
+There are somewhere between 2^{503} and 2^{504} 512-bit primes.
+
+If random number generators are failing to produce truly unpredictable numbers, this can produce serious weaknesses in cryptography. 
 
 ---
 ## ✅ Why This Matters
 RSA is only secure if keys are generated correctly. If devices use the same prime by accident (due to bad random number generators), millions of keys can be cracked in seconds. This project helps you detect and demonstrate that flaw.
+
+1. $$\ n_1 \$$ and $$\ n_2 \$$ must be relatively prime to each other.
+
+gcd($$\ n_1, n_2 \$$) = 1
 
 
 📚 References
