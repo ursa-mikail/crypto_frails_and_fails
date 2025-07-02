@@ -95,3 +95,15 @@ Use a cryptographically secure RNG, e.g., os.urandom(), secrets, or /dev/urandom
 
 Always ensure IVs are random and unique per encryption when using CBC mode.
 
+
+1. On the client side, during RSA handshake. RNG is used to generate RSA pre-master secret and encryption padding. If the attacker can predict the output of this generator, she can subsequently decrypt the entire session. Ironically, a failure of the server RNG is less devastating to the RSA handshake.
+2. On the client or server side, during the Diffie-Hellman handshake(s). Since Diffie-Hellman requires a contribution from each side of the connection, a predictable RNG on either side renders the session completely transparent.
+3. During long-term key generation, particularly of RSA keys. If this happens, it's over.
+
+### On salt as a randomizer:
+
+The purpose of including salts is to modify the function used to hash each user's password so that each stored password hash will have to be attacked individually. The only security requirement is that they are unique per user, there is no benefit in them being unpredictable or difficult to guess.
+
+Salts only need to be long enough so that each user's salt will be unique. Random 64-bit salts are unlikely to ever repeat even with a billion registered users. A singly repeated salt is a relatively minor security concern, it allows an attacker to search 2 accounts at once but in the aggregate won't speed up the search much on the whole database. Even 32-bit salts are acceptable for most purposes, it will in the worst case speed an attacker's search by about 58%. The cost of increasing salts beyond 64 bits isn't high but there is no security reason to do so. There is benefit to also using a site-wide salt on top of the per-user salt, this will prevent possible collisions with password hashes stored at other sites, and prevent the use of general-purpose rainbow tables, although even 32 bits of salt is enough to make rainbow tables an impractical attack.
+
+
