@@ -19,6 +19,11 @@ Fermat’s method is based on the identity:
 ```
 n = a² - b² = (a + b)(a - b)
 ```
+We then have the first prime as a−b and the second one as a+b. 
+If the prime numbers are close then the value of a will be close to the square root of N. We could thus guess the value of a from the square root of N and then increment the value of a and for each guess we take:
+```
+b² = a² - n
+```
 If you can find a such that a² - n is a perfect square, then:
 
 ```
