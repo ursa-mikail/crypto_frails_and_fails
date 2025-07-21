@@ -1,20 +1,18 @@
-from mpmath import riemannr
+from mpmath import riemannr, log10
 from decimal import Decimal, getcontext
 import matplotlib.pyplot as plt
 
-# Set decimal precision
-getcontext().prec = 50
+# Set decimal precision for huge numbers
+getcontext().prec = 100
 
 
 def estimate_primes_in_bit_range(bits: int) -> int:
-    """Estimate number of primes between 2**(bits-1) and 2**bits."""
     upper = 2 ** bits
     lower = 2 ** (bits - 1)
     return int(riemannr(upper)) - int(riemannr(lower))
 
 
 def estimate_prime_probability(bits: int) -> Decimal:
-    """Estimate the probability (%) of randomly picking a prime in that bit range."""
     upper = Decimal(2 ** bits)
     lower = Decimal(2 ** (bits - 1))
     total_numbers = upper - lower
@@ -23,36 +21,51 @@ def estimate_prime_probability(bits: int) -> Decimal:
     return probability.quantize(Decimal('0.01'))
 
 
-def generate_probability_plot(start_bits: int = 128, end_bits: int = 2048, step: int = 128):
-    """Generate and plot prime probability vs bit size, with detailed printouts."""
+def generate_plots(start_bits: int = 128, end_bits: int = 2048, step: int = 128):
     bit_sizes = list(range(start_bits, end_bits + 1, step))
     probabilities = []
+    prime_logs = []
 
     print("Estimating number of primes and probabilities for each bit size:\n")
 
     for bits in bit_sizes:
         estimated_primes = estimate_primes_in_bit_range(bits)
         probability = estimate_prime_probability(bits)
+
+        # Use log10 scale for safe and readable plotting
+        prime_log = float(log10(Decimal(estimated_primes)))
+        prime_logs.append(prime_log)
         probabilities.append(float(probability))
 
         print(f"Number of bits in prime number:\t{bits}")
         print(f"Estimated number of prime numbers:\t{estimated_primes}")
         print(f"Chance of finding a prime:\t\t{probability} %\n")
 
-    # Plotting
-    plt.figure(figsize=(10, 6))
-    plt.plot(bit_sizes, probabilities, marker='o', linestyle='-', color='blue')
-    plt.title('Probability of Randomly Choosing a Prime Number by Bit Size')
+    # Plot 1: Prime probability
+    plt.figure(figsize=(12, 6))
+    plt.subplot(1, 2, 1)
+    plt.plot(bit_sizes, probabilities, marker='o', color='blue')
+    plt.title('Probability of Randomly Choosing a Prime')
     plt.xlabel('Bit Size')
     plt.ylabel('Probability (%)')
     plt.grid(True)
     plt.xticks(bit_sizes)
+
+    # Plot 2: Log10 of number of primes
+    plt.subplot(1, 2, 2)
+    plt.plot(bit_sizes, prime_logs, marker='s', color='green')
+    plt.title('log10(Number of Primes in Bit Range)')
+    plt.xlabel('Bit Size')
+    plt.ylabel('log10(Estimated Number of Primes)')
+    plt.grid(True)
+    plt.xticks(bit_sizes)
+
     plt.tight_layout()
     plt.show()
 
 
 if __name__ == "__main__":
-    generate_probability_plot(start_bits=128, end_bits=2048, step=128)
+    generate_plots(start_bits=128, end_bits=2048, step=128)
 
 """
 Estimating number of primes and probabilities for each bit size:
@@ -122,3 +135,4 @@ Estimated number of prime numbers:  11385172270258672953764793456388645214256740
 Chance of finding a prime:      0.07 %
 
 """
+

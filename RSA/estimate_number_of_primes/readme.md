@@ -50,3 +50,4 @@ generate_probability_plot(start_bits=256, end_bits=1024, step=64)
 
 ![estimate_number_of_primes](estimate_number_of_primes.png)
 
+![estimate_number_of_primes](estimate_number_of_primes_01.png)
