@@ -47,3 +47,6 @@ generate_probability_plot(start_bits=128, end_bits=2048, step=128)
 For example, to go from 256 to 1024 with 64-bit steps:
 generate_probability_plot(start_bits=256, end_bits=1024, step=64)
 ```
+
+![estimate_number_of_primes](estimate_number_of_primes.png)
+
