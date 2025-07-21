@@ -106,4 +106,14 @@ generate_probability_plot(start_bits=256, end_bits=1024, step=64)
 
 ![estimate_number_of_primes_02](estimate_number_of_primes_02.png)
 
+If our attacker can tries 1 billion prime numbers per second, 
+
+```
+10⁵⁰ / 10⁹ = 10⁴¹ seconds ≈ 3.2×10³³ years
+```
+
+bits=⌊log2​(10^{50})⌋+1 = 166.0965 + 1 bits
+
+If an attacker could try 1 billion prime numbers per second, and you chose a 166-bit prime number (around 10⁵⁰), the total number of primes they'd need to check is about 8.7×10^{47}. At that speed, it would take them about 2.76 × 10^{31} years — vastly longer than the age of the universe — to exhaust the search. This is why cryptographic keys use extremely large primes: to make brute-force attacks computationally infeasible.
+
 
