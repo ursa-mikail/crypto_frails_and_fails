@@ -63,7 +63,7 @@ In cryptography we sometimes have to estimate pi(x) , and which is the number of
 
 One of the methods used is calculates the prime counting function π(x) using Schoenfeld’s inequality:
 
-$$\ π(x) - li(x) < \frac{\sqrt(x) \log x }{8π} \$$
+$$\ π(x) - li(x) < \frac{ (\sqrt(x)) * \log x }{8π} \$$
 
 One method which can be used to estimate the number of prime numbers is the Riemann R function. This is a smooth approximation for π(x). The function is defined using the rapidly convergent Gram series:
 
@@ -76,7 +76,7 @@ $$\ π(x) ≈ R(x) \$$
 
 To find the number of primes in a bit range:
 
-$$\ Count ≈ R(2^n) - R(2^(n-1)) \$$
+$$\ Count ≈ R(2^n) - R(2^{n-1}) \$$
 
 
 Probability is computed as:
