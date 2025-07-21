@@ -61,6 +61,10 @@ print("2048-bit prime count (sci):", to_scientific_notation(count_2048))
 
 In cryptography we sometimes have to estimate pi(x) , and which is the number of primes between 0 and x . This page estimate the number of primes for a given bit size and will use the Riemannr method.
 
+One of the methods used is calculates the prime counting function π(x) using Schoenfeld’s inequality:
+
+$$\ π(x) - li(x) < \frac{\sqrt(x) \log x }{8π} \$$
+
 One method which can be used to estimate the number of prime numbers is the Riemann R function. This is a smooth approximation for π(x). The function is defined using the rapidly convergent Gram series:
 
 $$\ R(x) = 1 + \sum^{\inf}_{k=1} \frac{\log^k x}{ k.k! \zeta (k+1) } \$$
@@ -83,6 +87,8 @@ Number of bits in prime number:	512
 Estimated number of prime numbers:	961409783
 Chance of finding a prime:		6.61 %
 
+
+
 ### ⚙️ Customize Range
 
 ```
@@ -96,4 +102,8 @@ generate_probability_plot(start_bits=256, end_bits=1024, step=64)
 
 ![estimate_number_of_primes](estimate_number_of_primes.png)
 
-![estimate_number_of_primes](estimate_number_of_primes_01.png)
+![estimate_number_of_primes_01](estimate_number_of_primes_01.png)
+
+![estimate_number_of_primes_02](estimate_number_of_primes_02.png)
+
+
