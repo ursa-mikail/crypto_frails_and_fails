@@ -81,7 +81,7 @@ $$\ Count ≈ R(2^n) - R(2^{n-1}) \$$
 
 Probability is computed as:
 
-$$\ P(n) = (Estimated primes in range) / (Total numbers in range) × 100% \$$
+P(n) = (Estimated primes in range) / (Total numbers in range) × 100% 
 
 Number of bits in prime number:	512
 Estimated number of prime numbers:	961409783
