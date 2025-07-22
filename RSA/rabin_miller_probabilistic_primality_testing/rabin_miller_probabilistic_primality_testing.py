@@ -14,7 +14,7 @@ def is_probable_prime(n: int, k: int = 40) -> bool:
     if n <= 1 or n % 2 == 0:    # Any number less than 2 or even (other than 2) is not prime.
         return False
 
-    # Write n-1 as 2^r * d. Essential to prepare for the Miller-Rabin test.
+    # Write n-1 as 2^r * d. Essential to prepare for the Miller-Rabin test. Derive d and r. 
     r, d = 0, n - 1
     while d % 2 == 0:
         r += 1
